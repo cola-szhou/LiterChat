@@ -9,9 +9,7 @@ import Sidebar from "@/components/Sidebar";
 import ChatHeader from "@/components/ChatHeader";
 import ChatInput from "@/components/ChatInput";
 import ChatMessages from "@/components/ChatMessages";
-import { fetcher } from "@/lib/utils";
 import { User } from "next-auth";
-import { generateUUID } from "@/lib/utils";
 
 export const Chat = ({
   id,
@@ -44,19 +42,41 @@ export const Chat = ({
     body: { id },
     initialMessages,
     onResponse: async (response) => {
-      // console.log("response", response);
-      const data = await response.json();
-      // console.log("data", data);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: data.id,
-          role: "assistant",
-          content: data.content,
-          createdAt: data.createdAt,
-          experimental_attachments: data.experimental_attachments,
-        },
-      ]);
+      if (!response.body) return;
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let accumulatedContent = "";
+
+      const assistantMessage = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "",
+        createdAt: new Date(),
+        experimental_attachments: [],
+      };
+
+      setMessages((prev) => [...prev, assistantMessage as Message]);
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          accumulatedContent += chunk;
+
+          setMessages((prev) =>
+            prev.map((msg) =>
+              msg.id === assistantMessage.id
+                ? { ...msg, content: accumulatedContent }
+                : msg
+            )
+          );
+        }
+      } catch (error) {
+        console.error("Error processing stream:", error);
+      }
     },
     onFinish: () => {
       mutate("/api/history");

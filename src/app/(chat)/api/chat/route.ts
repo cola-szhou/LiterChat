@@ -9,7 +9,13 @@ import {
 } from "@/lib/db/queries";
 import { authOptions } from "@/app/(auth)/auth";
 import { getServerSession } from "next-auth/next";
-import { type Message, type Attachment, convertToCoreMessages } from "ai";
+import {
+  type Message,
+  type Attachment,
+  convertToCoreMessages,
+  createDataStream,
+  createDataStreamResponse,
+} from "ai";
 import { del } from "@vercel/blob";
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -19,16 +25,12 @@ export async function POST(request: NextRequest) {
   try {
     const { id, messages }: { id: string; messages: Array<Message> } =
       await request.json();
-    console.log("messages", messages);
     // const coreMessages = convertToCoreMessages(messages);
     const coreMessages = messages;
-    console.log("coremessages", coreMessages);
-    console.log("id", id);
     const session = await getServerSession(authOptions);
     const chat = await getChatById({ id });
     if (!chat) {
       const title = messages[0].content ?? "New chat";
-      console.log("userId", session?.user?.id);
       const userId = session?.user?.id ?? "anonymous";
       await saveChat({ id, userId, title });
     }
@@ -59,7 +61,6 @@ export async function POST(request: NextRequest) {
     const data = await response.json();
     const myString = data.result;
 
-    // const myString = "This is the response for: " + userMessage;
     let Attachments: Array<Attachment> = [];
 
     const assistantMessage = {
@@ -75,7 +76,32 @@ export async function POST(request: NextRequest) {
 
     await saveMessages({ messages: [assistantMessage] });
 
-    return NextResponse.json(assistantMessage, { status: 200 });
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      async start(controller) {
+        // In this example, we'll enqueue one character at a time:
+        for (let i = 0; i < myString.length; i++) {
+          const chunk = myString[i];
+          // Encode the chunk as a Uint8Array
+          controller.enqueue(encoder.encode(chunk));
+          // (Optional) small delay to demonstrate streaming
+          await new Promise((res) => setTimeout(res, 8));
+        }
+
+        // When finished, close the stream
+        controller.close();
+      },
+    });
+
+    return new NextResponse(stream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        // These headers help ensure the response isn't buffered by the browser
+        "Cache-Control": "no-cache, no-transform",
+        Connection: "keep-alive",
+      },
+    });
+    // return NextResponse.json(assistantMessage, { status: 200 });
   } catch (err: any) {
     console.error("Error deleting chat", err);
     return NextResponse.json(
@@ -88,7 +114,6 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
-  console.log("delete_id", id);
 
   if (!id) {
     return new Response("Not Found", { status: 404 });

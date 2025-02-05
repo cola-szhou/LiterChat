@@ -50,7 +50,6 @@ export async function POST(request: Request) {
     // Get filename from formData
     const filename = (formData.get("file") as File).name;
     const fileBuffer = await file.arrayBuffer();
-    console.log("filename", filename);
 
     try {
       const uploadsDir = path.resolve("public/uploads");

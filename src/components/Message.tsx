@@ -52,7 +52,7 @@ export const PreviewMessage = ({
           key={message.id}
           className=" rounded-xl text-wrap flex flex-row place-self-start gap-1 break-all"
         >
-          <div className="w-8 h-7 flex items-center justify-center rounded-full border border-black-100">
+          <div className="w-7 h-7 flex-none flex items-center justify-center rounded-full border border-black-100">
             <BsStars className="w-3 h-3" />
           </div>
           <div>
