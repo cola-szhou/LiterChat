@@ -1,13 +1,11 @@
 import "dotenv/config";
-// import { drizzle } from "drizzle-orm/sqlite";
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import { eq } from "drizzle-orm";
-import { user } from "./schema";
-import { message } from "./schema";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 
-// const db = drizzle(process.env.DB_FILE_NAME!);
-const sqlite = new Database("./lib/db/test.db");
-const db = drizzle(sqlite);
+const client = createClient({
+  url: process.env.TURSO_DATABASE_URL!,
+  authToken: process.env.TURSO_AUTH_TOKEN!,
+});
+const db = drizzle({ client });
 
 export { db };
