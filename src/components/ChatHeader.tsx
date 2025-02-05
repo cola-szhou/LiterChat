@@ -88,14 +88,14 @@ const ChatHeader = ({
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
         </label>
-        {!user && (
+        {user.id === "guest" && (
           <div className="tooltip tooltip-left " data-tip="Sign in">
             <a href="/login" className="block">
               <FaCircleUser className={"w-5 h-5"} />
             </a>
           </div>
         )}
-        {user && (
+        {user.id !== "guest" && (
           <div className="dropdown dropdown-end dropdown-hover z-50">
             <div tabIndex={0} role="button">
               <FaCircleUser className={"w-5 h-5"} />

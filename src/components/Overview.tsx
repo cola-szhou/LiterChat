@@ -16,23 +16,9 @@ const Overview = () => {
           }
         >
           <PiBrainDuotone className={"w-14 h-14"} />
-          <span className={"p-2"}>ixAutoDaT</span>
+          <span className={"p-2"}>LiterChat</span>
         </div>
-        <p>
-          Welcome to ixAutoDaT, a chatbot that can help you{" "}
-          <Link
-            className={"font-semibold underline underline-offset-4 "}
-            href="/automl"
-            //   target="_blank"
-          >
-            automatic train a model
-          </Link>{" "}
-          for DaT SPECT image classification, and provide you with the
-          explanation of the model and the decision-making process.
-        </p>
-        <p>
-          Let's start by training a new model or uploading a pre-trained model.
-        </p>
+        <p>Welcome to LiterChat, a chatbot that can help you...</p>
       </div>
     </div>
   );

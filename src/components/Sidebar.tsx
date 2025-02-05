@@ -53,7 +53,7 @@ const Sidebar = ({
                 <PiSidebarFill className={"w-5 h-5"} onClick={toggleSidebar} />
               </div>
               <div
-                className="tooltip tooltip-left "
+                className=" tooltip tooltip-left "
                 data-tip="New chat"
                 onClick={() => {
                   router.push("/");
@@ -71,7 +71,7 @@ const Sidebar = ({
               }
             >
               <PiBrainDuotone className={"w-8 h-8 fill-base-content"} />
-              <span className={"p-2"}>ixAutoDaT</span>
+              <span className={"p-2"}>LiterChat</span>
             </div>
             <div className="divider my-0 px-1"></div>
             <SidebarHistory user={user} id={chatId} />
@@ -133,7 +133,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
     }
   };
 
-  if (!user) {
+  if (user.id === "guest") {
     return (
       <div className="text-sm px-1 text-zinc-500 w-full flex flex-row justify-center items-center text-sm gap-2">
         Login to save and revisit previous chats!

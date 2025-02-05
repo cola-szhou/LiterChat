@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { NextRequest, NextResponse } from "next/server";
 import { generateUUID } from "@/lib/utils";
 import {
@@ -46,7 +47,19 @@ export async function POST(request: NextRequest) {
       ],
     });
 
-    const myString = "This is the response for: " + userMessage;
+    if (!process.env.BACKEND_URL) {
+      throw new Error("BACKEND_URL is not defined");
+    }
+
+    const response = await fetch(process.env.BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: userMessage }),
+    });
+    const data = await response.json();
+    const myString = data.result;
+
+    // const myString = "This is the response for: " + userMessage;
     let Attachments: Array<Attachment> = [];
 
     const assistantMessage = {
