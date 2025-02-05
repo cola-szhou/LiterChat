@@ -25,11 +25,16 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/AlertDialog";
 
-const Sidebar: React.FC<SidebarProps> = ({
+const Sidebar = ({
   isVisible,
   toggleSidebar,
   user,
   chatId,
+}: {
+  isVisible: boolean;
+  toggleSidebar: () => void;
+  user: User;
+  chatId: string;
 }) => {
   const router = useRouter();
   return (
@@ -201,7 +206,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
     );
   };
 
-  const groupedChats = groupChatsByDate(history);
+  const groupedChats = groupChatsByDate(history ?? []);
 
   return (
     <div className="relative flex w-full flex-col">
@@ -229,7 +234,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
                       chat.id === id ? "flex" : "hidden"
                     }`}
                     data-tip="Delete"
-                    onClick={() => {
+                    onClick={(event) => {
                       event.stopPropagation();
                       setDeleteId(chat.id);
                       setShowDeleteDialog(true);
@@ -267,7 +272,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
                       chat.id === id ? "flex" : "hidden"
                     }`}
                     data-tip="Delete"
-                    onClick={() => {
+                    onClick={(event) => {
                       event.stopPropagation();
                       setDeleteId(chat.id);
                       setShowDeleteDialog(true);
@@ -305,7 +310,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
                       chat.id === id ? "flex" : "hidden"
                     }`}
                     data-tip="Delete"
-                    onClick={() => {
+                    onClick={(event) => {
                       event.stopPropagation();
                       setDeleteId(chat.id);
                       setShowDeleteDialog(true);
@@ -343,7 +348,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
                       chat.id === id ? "flex" : "hidden"
                     }`}
                     data-tip="Delete"
-                    onClick={() => {
+                    onClick={(event) => {
                       event.stopPropagation();
                       setDeleteId(chat.id);
                       setShowDeleteDialog(true);
@@ -382,7 +387,7 @@ const SidebarHistory = ({ user, id }: { user: User; id: string }) => {
                       chat.id === id ? "flex" : "hidden"
                     }`}
                     data-tip="Delete"
-                    onClick={() => {
+                    onClick={(event) => {
                       event.stopPropagation();
                       setDeleteId(chat.id);
                       setShowDeleteDialog(true);

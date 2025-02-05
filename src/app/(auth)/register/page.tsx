@@ -105,7 +105,16 @@ export default function Page() {
           <button
             className="btn btn-primary"
             type="submit"
-            onClick={() => document.getElementById("hint").showModal()}
+            onClick={() => {
+              const modal = document.getElementById(
+                "hint"
+              ) as HTMLDialogElement | null;
+              if (modal) {
+                modal.showModal();
+              } else {
+                console.error("Modal element with ID 'hint' not found.");
+              }
+            }}
           >
             Sign up
           </button>

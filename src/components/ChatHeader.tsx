@@ -15,19 +15,16 @@ import { useRouter } from "next/navigation";
 //   toggleSidebar: () => void;
 // }
 
-const ChatHeader: React.FC<SidebarProps> = ({
+const ChatHeader = ({
   isVisible,
   toggleSidebar,
   user,
-  isdark,
-  setIsdark,
+}: {
+  isVisible: boolean;
+  toggleSidebar: () => void;
+  user: any;
 }) => {
   const router = useRouter();
-  const handleThemeChange = () => {
-    const newTheme = isdark ? "cupcake" : "night";
-    setIsdark(!isdark);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
   return (
     <div className="flex w-full justify-between p-4">
       {!isVisible ? (
@@ -119,9 +116,8 @@ const ChatHeader: React.FC<SidebarProps> = ({
               </li>
 
               <li
-                type="button"
                 onClick={() => {
-                  signOut({ redirectTo: "/" });
+                  signOut({ callbackUrl: "/" });
                 }}
               >
                 <a>

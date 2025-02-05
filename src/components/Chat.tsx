@@ -99,7 +99,6 @@ export const Chat = ({
             chatId={id}
             input={input}
             setInput={setInput}
-            handleSubmit={handleSubmit}
             isLoading={isLoading}
             stop={stop}
             attachments={attachments}
@@ -107,6 +106,7 @@ export const Chat = ({
             messages={messages}
             setMessages={setMessages}
             append={append}
+            handleSubmit={handleSubmit}
           />
         </div>
       </div>

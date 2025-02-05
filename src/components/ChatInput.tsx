@@ -17,11 +17,11 @@ import type {
   CreateMessage,
   Message,
 } from "ai";
-import { Textarea } from "./ui/Textarea";
+import { Textarea } from "@/components/ui/Textarea";
 import cx from "classnames";
 import { BsFillSendFill } from "react-icons/bs";
 import { IoMdAttach, IoIosSend } from "react-icons/io";
-import { SuggestedActions } from "./SuggestedActions";
+import { SuggestedActions } from "@/components/SuggestedActions";
 import { useLocalStorage, useWindowSize } from "usehooks-ts";
 import { toast } from "sonner";
 import { is } from "drizzle-orm";
@@ -43,8 +43,6 @@ const ChatInput = ({
   setMessages,
   append,
   handleSubmit,
-  className,
-  onSendMessage,
 }: {
   chatId: string;
   input: string;
@@ -63,8 +61,6 @@ const ChatInput = ({
     event?: { preventDefault: () => void },
     chatRequestOptions?: ChatRequestOptions
   ) => void;
-  className: string;
-  onSendMessage: (message: string) => void;
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { width } = useWindowSize();
@@ -190,7 +186,9 @@ const ChatInput = ({
           ...successfullyUploadedAttachments,
         ]);
       } catch (error) {
-        toast.error("Error uploading files!", error);
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        toast.error("Error uploading files! " + errorMessage);
       } finally {
         setUploadQuene([]);
       }
@@ -205,7 +203,7 @@ const ChatInput = ({
         attachments.length === 0 &&
         uploadQuene.length === 0 && (
           <div>
-            <SuggestedActions />
+            <SuggestedActions messages={messages} setMessages={setMessages} />
           </div>
         )}
       {/*Input area*/}

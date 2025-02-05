@@ -151,129 +151,129 @@ export async function deleteMessageByChatIdAfterTimestamp({
   }
 }
 
-export async function saveDocument({
-  id,
-  title,
-  kind,
-  content,
-  userId,
-}: {
-  id: string;
-  title: string;
-  kind: BlockKind;
-  content: string;
-  userId: string;
-}) {
-  try {
-    return await db
-      .insert(document)
-      .values({ id, title, kind, content, userId, createAt: new Date() });
-  } catch (error) {
-    console.error("Failed to save document in database!");
-    throw error;
-  }
-}
+// export async function saveDocument({
+//   id,
+//   title,
+//   kind,
+//   content,
+//   userId,
+// }: {
+//   id: string;
+//   title: string;
+//   kind: BlockKind;
+//   content: string;
+//   userId: string;
+// }) {
+//   try {
+//     return await db
+//       .insert(document)
+//       .values({ id, title, kind, content, userId, createAt: new Date() });
+//   } catch (error) {
+//     console.error("Failed to save document in database!");
+//     throw error;
+//   }
+// }
 
-export async function getDocumentsById({ id }: { id: string }) {
-  try {
-    const documents = await db
-      .select()
-      .from(document)
-      .where(eq(document.userId, id))
-      .orderBy(desc(document.createAt));
+// export async function getDocumentsById({ id }: { id: string }) {
+//   try {
+//     const documents = await db
+//       .select()
+//       .from(document)
+//       .where(eq(document.userId, id))
+//       .orderBy(desc(document.createAt));
 
-    return documents;
-  } catch (error) {
-    console.error("Failed to get documents by id from database!");
-    throw error;
-  }
-}
+//     return documents;
+//   } catch (error) {
+//     console.error("Failed to get documents by id from database!");
+//     throw error;
+//   }
+// }
 
-export async function getDocymentByID({ id }: { id: string }) {
-  try {
-    const [selectedDocument] = await db
-      .select()
-      .from(document)
-      .where(eq(document.id, id))
-      .orderBy(desc(document.createAt));
-    return selectedDocument;
-  } catch (error) {
-    console.error("Failed to get document by id from database!");
-    throw error;
-  }
-}
+// export async function getDocymentByID({ id }: { id: string }) {
+//   try {
+//     const [selectedDocument] = await db
+//       .select()
+//       .from(document)
+//       .where(eq(document.id, id))
+//       .orderBy(desc(document.createAt));
+//     return selectedDocument;
+//   } catch (error) {
+//     console.error("Failed to get document by id from database!");
+//     throw error;
+//   }
+// }
 
-export async function deleteDocumentsByIdAfterTimestamp({
-  id,
-  timestamp,
-}: {
-  id: string;
-  timestamp: Date;
-}) {
-  try {
-    return await db
-      .delete(document)
-      .where(and(eq(document.userId, id), gt(document.createAt, timestamp)));
-  } catch (error) {
-    console.error(
-      "Failed to delete documents by id after timestamp from database!"
-    );
-    throw error;
-  }
-}
+// export async function deleteDocumentsByIdAfterTimestamp({
+//   id,
+//   timestamp,
+// }: {
+//   id: string;
+//   timestamp: Date;
+// }) {
+//   try {
+//     return await db
+//       .delete(document)
+//       .where(and(eq(document.userId, id), gt(document.createAt, timestamp)));
+//   } catch (error) {
+//     console.error(
+//       "Failed to delete documents by id after timestamp from database!"
+//     );
+//     throw error;
+//   }
+// }
 
-export async function getVotesByChatId({ id }: { id: string }) {
-  try {
-    return await db.select().from(vote).where(eq(vote.chatId, id));
-  } catch (error) {
-    console.error("Failed to get votes by chat id from database", error);
-    throw error;
-  }
-}
+// export async function getVotesByChatId({ id }: { id: string }) {
+//   try {
+//     return await db.select().from(vote).where(eq(vote.chatId, id));
+//   } catch (error) {
+//     console.error("Failed to get votes by chat id from database", error);
+//     throw error;
+//   }
+// }
 
-export async function voteMessage({
-  chatId,
-  messageId,
-  type,
-}: {
-  chatId: string;
-  messageId: string;
-  type: "up" | "down";
-}) {
-  try {
-    const [existingVote] = await db
-      .select()
-      .from(vote)
-      .where(and(eq(vote.messageId, messageId)));
+// export async function voteMessage({
+//   chatId,
+//   messageId,
+//   type,
+// }: {
+//   chatId: string;
+//   messageId: string;
+//   type: "up" | "down";
+// }) {
+//   try {
+//     const [existingVote] = await db
+//       .select()
+//       .from(vote)
+//       .where(and(eq(vote.messageId, messageId)));
 
-    if (existingVote) {
-      return await db
-        .update(vote)
-        .set({ isUpvoted: type === "up" })
-        .where(and(eq(vote.messageId, messageId), eq(vote.chatId, chatId)));
-    }
-    return await db.insert(vote).values({
-      chatId,
-      messageId,
-      isUpvoted: type === "up",
-    });
-  } catch (error) {
-    console.error("Failed to upvote message in database", error);
-    throw error;
-  }
-}
+//     if (existingVote) {
+//       return await db
+//         .update(vote)
+//         .set({ isUpvoted: type === "up" })
+//         .where(and(eq(vote.messageId, messageId), eq(vote.chatId, chatId)));
+//     }
+//     return await db.insert(vote).values({
+//       chatId,
+//       messageId,
+//       isUpvoted: type === "up",
+//     });
+//   } catch (error) {
+//     console.error("Failed to upvote message in database", error);
+//     throw error;
+//   }
+// }
 
-export async function updateChatVisibilityById({
-  chatId,
-  visibility,
-}: {
-  chatId: string;
-  visibility: "private" | "public";
-}) {
-  try {
-    return await db.update(chat).set({ visibility }).where(eq(chat.id, chatId));
-  } catch (error) {
-    console.error("Failed to update chat visibility in database", error);
-    throw error;
-  }
-}
+// export async function updateChatVisibilityById({
+//   chatId,
+//   visibility,
+// }: {
+//   chatId: string;
+//   visibility: "private" | "public";
+// }) {
+//   try {
+//     return await db.update(chat).set({ visibility }).where(eq(chat.id, chatId));
+//   } catch (error) {
+//     console.error("Failed to update chat visibility in database", error);
+//     throw error;
+//   }
+// }

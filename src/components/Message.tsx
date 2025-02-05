@@ -1,19 +1,24 @@
 import React from "react";
 import { BsStars } from "react-icons/bs";
 import PreviewAttachment from "@/components/PreviewAttachment";
+import { type Message, ChatRequestOptions } from "ai";
 
-interface Message {
-  sender: string;
-  text: string;
-}
-
-export const PreviewMessage: React.FC<Message> = ({
-  ChatId,
+export const PreviewMessage = ({
+  chatId,
   message,
   isLoading,
   setMessages,
   reload,
-  isReadonly,
+}: {
+  chatId: string;
+  message: Message;
+  isLoading: boolean;
+  setMessages: (
+    messages: Message[] | ((messages: Message[]) => Message[])
+  ) => void;
+  reload: (
+    chatRequestOptions?: ChatRequestOptions
+  ) => Promise<string | null | undefined>;
 }) => {
   const sender = message.role;
   const text = message.content;

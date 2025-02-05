@@ -6,11 +6,11 @@ import {
   saveChat,
   saveMessages,
 } from "@/lib/db/queries";
-import { authOptions } from "@/app/(auth)/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/(auth)/auth";
 import { getServerSession } from "next-auth/next";
 import { type Message, type Attachment, convertToCoreMessages } from "ai";
 import { del } from "@vercel/blob";
-function delay(ms) {
+function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -27,8 +27,9 @@ export async function POST(request: NextRequest) {
     const chat = await getChatById({ id });
     if (!chat) {
       const title = messages[0].content ?? "New chat";
-      console.log("userId", session.user.id);
-      await saveChat({ id, userId: session.user.id, title });
+      console.log("userId", session?.user?.id);
+      const userId = session?.user?.id ?? "anonymous";
+      await saveChat({ id, userId, title });
     }
     const userMessage = messages[messages.length - 1]?.content || "";
     const userMessageId = generateUUID();
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
     let Attachments: Array<Attachment> = [];
 
     const assistantMessage = {
-      role: "assistant",
+      role: "assistant" as "assistant",
       content: myString,
       id: generateUUID(),
       createdAt: new Date(),

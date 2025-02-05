@@ -1,12 +1,15 @@
 import React from "react";
-import { Message, ChatMessagesProps } from "./ChatMessages";
+import { type Message } from "ai";
+import { generateUUID } from "@/lib/utils";
 
 export const SuggestedActions = ({
   messages,
   setMessages,
 }: {
-  messages: Message[];
-  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  messages: Array<Message>;
+  setMessages: (
+    messages: Message[] | ((messages: Message[]) => Message[])
+  ) => void;
 }) => {
   const suggestedActions = [
     {
@@ -22,8 +25,16 @@ export const SuggestedActions = ({
   ];
 
   const handleAddMessage = (content: string) => {
-    const newMessage = { sender: "User", text: content };
-    setMessages((prev) => [...prev, newMessage]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: generateUUID(),
+        role: "user",
+        content: content,
+        createdAt: new Date(),
+        experimental_attachments: [],
+      },
+    ]);
   };
   return (
     <div className="grid sm:grid-cols-2 gap-4 w-full py-2.5">

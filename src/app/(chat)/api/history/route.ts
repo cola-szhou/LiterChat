@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/(auth)/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/(auth)/auth";
 import { getServerSession } from "next-auth/next";
 import { getChatByUserId } from "@/lib/db/queries";
 

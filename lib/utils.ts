@@ -9,7 +9,7 @@ import type {
   Message,
 } from "ai";
 
-import type { Message as DBMessage, Document } from "@/lib/db/schema";
+import type { Message as DBMessage } from "@/lib/db/schema";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -60,32 +60,33 @@ export function convertToUIMessages(
   messages: Array<DBMessage>
 ): Array<Message> {
   return messages.reduce((chatMessages: Array<Message>, message) => {
-    if (message.role === "tool") {
-      return addToolMessageToChat({
-        toolMessage: message as CoreToolMessage,
-        messages: chatMessages,
-      });
-    }
+    // if (message.role === "tool") {
+    //   return addToolMessageToChat({
+    //     toolMessage: message as CoreToolMessage,
+    //     messages: chatMessages,
+    //   });
+    // }
 
     let textContent = "";
     const toolInvocations: Array<ToolInvocation> = [];
 
     if (typeof message.content === "string") {
       textContent = message.content;
-    } else if (Array.isArray(message.content)) {
-      for (const content of message.content) {
-        if (content.type === "string") {
-          textContent += content.text;
-        } else if (content.type === "tool-call") {
-          toolInvocations.push({
-            state: "call",
-            toolCallId: content.toolCallId,
-            toolName: content.toolName,
-            args: content.args,
-          });
-        }
-      }
     }
+    // } else if (Array.isArray(message.content)) {
+    //   for (const content of message.content) {
+    //     if (content.type === "string") {
+    //       textContent += content.text;
+    //     } else if (content.type === "tool-call") {
+    //       toolInvocations.push({
+    //         state: "call",
+    //         toolCallId: content.toolCallId,
+    //         toolName: content.toolName,
+    //         args: content.args,
+    //       });
+    //     }
+    //   }
+    // }
 
     chatMessages.push({
       id: message.id,

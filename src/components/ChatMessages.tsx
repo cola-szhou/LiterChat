@@ -17,8 +17,6 @@ interface MessageProps {
   reload: (
     chatRequestOptions?: ChatRequestOptions
   ) => Promise<string | null | undefined>;
-  isReadOnly: boolean;
-  isBlockVisible: boolean;
 }
 
 const ChatMessages = ({
@@ -27,7 +25,6 @@ const ChatMessages = ({
   messages,
   setMessages,
   reload,
-  isReadOnly,
 }: MessageProps) => {
   return (
     <div className="flex flex-1 flex-col pt-2 relative mb-3 w-2/3 place-self-center">
@@ -35,14 +32,12 @@ const ChatMessages = ({
       {messages.length > 0 &&
         messages.map((message, index) => (
           <PreviewMessage
-            className="w-full py-2"
             key={message.id || index}
             chatId={chatId}
             message={message}
             isLoading={isLoading && messages.length - 1 === index}
             setMessages={setMessages}
             reload={reload}
-            isReadonly={isReadOnly}
           />
         ))}
     </div>

@@ -1,7 +1,7 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { authOptions } from "@/app/(auth)/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/(auth)/auth";
 import { getServerSession } from "next-auth/next";
 import fs from "fs/promises";
 import path from "path";
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
   try {
     // console.log("Request", request.formData());
     const formData = await request.formData();
-    const file = formData.get("file") as Bolb;
+    const file = formData.get("file") as Blob;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
