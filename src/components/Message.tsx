@@ -2,6 +2,8 @@ import React from "react";
 import { BsStars } from "react-icons/bs";
 import PreviewAttachment from "@/components/PreviewAttachment";
 import { type Message, ChatRequestOptions } from "ai";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const PreviewMessage = ({
   chatId,
@@ -56,7 +58,9 @@ export const PreviewMessage = ({
             <BsStars className="w-3 h-3" />
           </div>
           <div>
-            <div className={"w-full pt-1 pl-3 whitespace-pre-wrap"}>{text}</div>
+            <div className="w-full pt-1 pl-3 whitespace-pre-wrap">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+            </div>
             <div className="flex flex-col gap-2 w-full ">
               {message.experimental_attachments && (
                 <div className="flex flex-row justify-begin gap-2">

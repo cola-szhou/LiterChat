@@ -56,10 +56,10 @@ export async function POST(request: NextRequest) {
     const response = await fetch(process.env.BACKEND_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: userMessage }),
+      body: JSON.stringify({ content: userMessage }),
     });
     const data = await response.json();
-    const myString = data.result;
+    const myString = data.content;
 
     let Attachments: Array<Attachment> = [];
 
@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
           // Encode the chunk as a Uint8Array
           controller.enqueue(encoder.encode(chunk));
           // (Optional) small delay to demonstrate streaming
-          await new Promise((res) => setTimeout(res, 8));
+          await new Promise((res) => setTimeout(res, 10));
         }
 
         // When finished, close the stream
