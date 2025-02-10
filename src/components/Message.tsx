@@ -58,7 +58,7 @@ export const PreviewMessage = ({
             <BsStars className="w-3 h-3" />
           </div>
           <div>
-            <div className="w-full pt-1 pl-3 whitespace-pre-wrap">
+            <div className="prose prose-lg w-full pt-1 pl-3">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </div>
             <div className="flex flex-col gap-2 w-full ">

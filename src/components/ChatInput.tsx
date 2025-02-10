@@ -196,13 +196,13 @@ const ChatInput = ({
   return (
     <div className="relative w-2/3 mt-3 mb-3 justify-center place-self-center">
       {/*Suggested actions*/}
-      {messages.length === 0 &&
+      {/* {messages.length === 0 &&
         attachments.length === 0 &&
         uploadQuene.length === 0 && (
           <div>
             <SuggestedActions messages={messages} setMessages={setMessages} />
           </div>
-        )}
+        )} */}
       {/*Input area*/}
       <input
         type="file"
